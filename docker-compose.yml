@@ -1,0 +1,28 @@
+version: '3.6'
+services:
+    custom:
+      build: 'sources'
+    adminer:
+      image: adminer
+      restart: always
+      ports:
+        - "50000:3306"
+    web:
+      image: php:7.2-apache
+      environment:
+        - ALLOW_OVERRIDE=true
+      ports:
+        - "30000:80"
+      links:
+        - db
+      volumes:
+        - ./app:/var/www/html/
+    db:
+      image: mariadb
+      volumes:
+        - ./mysql:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: admin
+        MYSQL_PASSWORD: root
+        MYSQL_DATABASE: database
